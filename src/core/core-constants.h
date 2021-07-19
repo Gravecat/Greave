@@ -9,7 +9,7 @@
 
 struct CoreConstants
 {
-    static constexpr uint32_t   SAVE_VERSION =      82;     // The version number for saved game files. This should increment when old saves can no longer be loaded.
+    static constexpr uint32_t   SAVE_VERSION =      83;     // The version number for saved game files. This should increment when old saves can no longer be loaded.
     static constexpr uint32_t   TAGS_PERMANENT =    10000;  // The tag number at which tags are considered permanent.
     static const char           GAME_VERSION[];             // The game's version number.
 };

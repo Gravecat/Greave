@@ -1,5 +1,5 @@
 // world/player.h -- The Player class is derived from Mobile, and defines the player character in the game world.
-// Copyright (c) 2021 Raine "Gravecat" Simmons. Licensed under the GNU Affero General Public License v3 or any later version.
+// Copyright (c) 2021 Raine "Gravecat" Simmons and the Greave contributors. Licensed under the GNU Affero General Public License v3 or any later version.
 
 #ifndef GREAVE_WORLD_PLAYER_H_
 #define GREAVE_WORLD_PLAYER_H_
@@ -77,6 +77,7 @@ private:
     static constexpr float  SKILL_HAULING_DIVISOR =         50;     // This number affects how effective the Hauling skill is at increasing maximum carry weight. LOWER number = skill allows more carry weight.
     static constexpr int    SP_DEFAULT =                    100;    // The default stamina points maximum for the player.
     static constexpr int    SP_REGEN_PER_TICK =             1;      // How much stamina is regenerated each stamina heartbeat tick?
+    static constexpr int    SP_REGEN_BLOAT_DIVISOR =        2;      // How much to divide SP regen by while bloated   
     static constexpr int    THIRST_MAX =                    20;     // The maximum thirst value (when this is maxed, the player is fully quenched.)
     static constexpr float  TOUGHNESS_GAIN_MODIFIER =       10;     // The higher this value, the faster toughness will increase in combat.
 
@@ -90,7 +91,7 @@ private:
     int                             mp_[2];         // The current and maximum mana points.
     std::map<std::string, int>      skill_levels_;  // The skill levels learned by this Player, if any.
     std::map<std::string, float>    skill_xp_;      // The experience levels of skills on this Player, if any.
-    int                             sp_[2];         // The current and maximum stamina points.
+    int                             sp_[3];         // The current,maximum and delayed stamina points.
     uint8_t                         thirst_;        // The thirst counter. 20 = compmpletely hydrated, 0 = died of dehydration.
 };
 
