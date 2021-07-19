@@ -92,10 +92,28 @@ bool ActionTravel::travel(std::shared_ptr<Mobile> mob, Direction dir, bool confi
         }
     }
 
+    // If the player is travelling, temporarily disable mobile roaming in both rooms.
+    if (is_player)
+    {
+        room->set_tag(RoomTag::NoRoam_Temp);
+        world->get_room(room_link)->set_tag(RoomTag::NoRoam_Temp);
+    }
+
+    // Calculate how long this travel will take.
     float travel_time = TRAVEL_TIME_NORMAL;
     if (room->link_tag(dir, LinkTag::DoubleLength)) travel_time = TRAVEL_TIME_DOUBLE;
     else if (room->link_tag(dir, LinkTag::TripleLength)) travel_time = TRAVEL_TIME_TRIPLE;
-    if (!mob->pass_time(travel_time, !confirm))
+    const bool interrupted = (!mob->pass_time(travel_time, !confirm));
+
+    // Again, if it's the player, clear the tags here -- that way, they're cleared regardless of the failure conditions below.
+    if (is_player)
+    {
+        room->clear_tag(RoomTag::NoRoam_Temp);
+        world->get_room(room_link)->clear_tag(RoomTag::NoRoam_Temp);
+    }
+
+    // Now we can check the failure conditions.
+    if (interrupted)
     {
         core()->parser()->interrupted("leave");
         return false;

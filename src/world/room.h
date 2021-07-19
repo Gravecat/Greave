@@ -79,6 +79,7 @@ enum class RoomTag : uint16_t {
     MetaChanged,            // The metadata on this room has changed.
     MobSpawned,             // This room has spawned a mob already.
     MobSpawnListChanged,    // The mob spawn list on this room has changed.
+    NoRoam_Temp,            // Temporarily disable mobiles from roaming in or out of this room.
     SaveActive,             // An extra-temporary tag used by the save system, to keep track of active rooms when saving/loading the game.
 
 

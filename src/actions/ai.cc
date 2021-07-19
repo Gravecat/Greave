@@ -140,6 +140,7 @@ bool AI::travel_randomly(std::shared_ptr<Mobile> mob, bool allow_dangerous_exits
 {
     const uint32_t location = mob->location();
     const auto room = core()->world()->get_room(location);
+    if (room->tag(RoomTag::NoRoam_Temp)) return false;
 
     std::vector<int> viable_exits;
     for (int i = 0; i < Room::ROOM_LINKS_MAX; i++)
@@ -148,6 +149,7 @@ bool AI::travel_randomly(std::shared_ptr<Mobile> mob, bool allow_dangerous_exits
         if (!allow_dangerous_exits && room->dangerous_link(i)) continue;
         if (room->link_tag(i, LinkTag::Locked)) continue;
         if (mob->tag(MobileTag::CannotOpenDoors) && room->link_tag(i, LinkTag::Openable) && !room->link_tag(i, LinkTag::Open)) continue;
+        if (core()->world()->get_room(room->link(i))->tag(RoomTag::NoRoam_Temp)) continue;
         viable_exits.push_back(i);
     }
     if (viable_exits.size()) return ActionTravel::travel(mob, static_cast<Direction>(viable_exits.at(core()->rng()->rnd(0, viable_exits.size() - 1))), true);
