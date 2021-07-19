@@ -65,7 +65,7 @@ float Item::armour(int bonus_power) const
 void Item::assign_inventory(std::shared_ptr<Inventory> inventory)
 {
     inventory_ = inventory;
-    inventory_->set_prefix(Inventory::PID_PREFIX_ITEM_INV);
+    if (inventory_) inventory_->set_prefix(Inventory::PID_PREFIX_ITEM_INV);
 }
 
 // Returns thie bleed chance of this Item, if any.

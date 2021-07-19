@@ -35,7 +35,7 @@ Parser::Parser() : special_state_(SpecialState::NONE)
     add_command("empty <item:i>", ParserCommand::EMPTY);
     add_command("[equipment|equip|eq]", ParserCommand::EQUIPMENT);
     add_command("[equip|eq|wield|hold|wear] <item:i>", ParserCommand::EQUIP);
-    add_command("[examine|exam|ex|x] <item:i|item:e|item:r|item:s|mobile>", ParserCommand::EXAMINE);
+    add_command("[examine|exam|ex|x] <item:i|item:e|item:r|item:s|item:cr|item:ci|mobile>", ParserCommand::EXAMINE);
     add_command("exits", ParserCommand::EXITS);
     add_command("[eyeforaneye|efae|ef]", ParserCommand::EYE_FOR_AN_EYE);
     add_command("[fill|refill] <item:i>", ParserCommand::FILL);
@@ -48,7 +48,7 @@ Parser::Parser() : special_state_(SpecialState::NONE)
     add_command("[ladyluck|lady|ll] <mobile>", ParserCommand::LADY_LUCK);
     add_command("lock <dir>", ParserCommand::LOCK);
     add_command("[look|l]", ParserCommand::LOOK);
-    add_command("[look|l] <item:i|item:e|item:r|item:s|mobile>", ParserCommand::EXAMINE);
+    add_command("[look|l] <item:i|item:e|item:r|item:s|item:cr|item:ci|mobile>", ParserCommand::EXAMINE);
     add_command("no", ParserCommand::NO);
     add_command("[north|n|east|e|south|s|west|w|northeast|ne|northwest|nw|southeast|se|southwest|sw|up|u|down|d]", ParserCommand::DIRECTION);
     add_command("open <dir>", ParserCommand::OPEN);
@@ -65,7 +65,7 @@ Parser::Parser() : special_state_(SpecialState::NONE)
     add_command("[snapshot|ss] <mobile>", ParserCommand::SNAP_SHOT);
     add_command("stance <txt>", ParserCommand::STANCE);
     add_command("[status|stat|st]", ParserCommand::STATUS);
-    add_command("[take|get] <item:r>", ParserCommand::TAKE);
+    add_command("[take|get|loot] <item:r|item:cr|item:ci>", ParserCommand::TAKE);
     add_command("[time|date]", ParserCommand::TIME);
     add_command("[unequip|uneq|remove] <item:e>", ParserCommand::UNEQUIP);
     add_command("unlock <dir>", ParserCommand::UNLOCK);
@@ -198,12 +198,13 @@ int32_t Parser::parse_int(const std::string &s)
 // Attempts to match a name to a given target.
 Parser::ParserSearchResult Parser::parse_target(std::vector<std::string> input, ParserTarget target)
 {
-    if (!input.size()) return { 0, "", "", 0, 0, ParserTarget::TARGET_NONE, 0 };   // Don't even *try* with blank inputs.
+    if (!input.size()) return { 0, "", "", 0, 0, 0, ParserTarget::TARGET_NONE, 0 };   // Don't even *try* with blank inputs.
 
     std::vector<ParserSearchResult> candidates;
     const std::shared_ptr<World> world = core()->world();
     const std::shared_ptr<Player> player = world->player();
     const uint32_t player_location = player->location();
+    const auto room = world->get_room(player_location);
     int count = -1;
 
     // First, check if the player has specified a number (not the numerical ID of an item or mobile, but a count like dropping 10 arrows).
@@ -220,36 +221,53 @@ Parser::ParserSearchResult Parser::parse_target(std::vector<std::string> input, 
         for (size_t i = 0; i < equ->count(); i++)
         {
             const std::shared_ptr<Item> item = equ->get(i);
-            candidates.push_back({0, StrX::str_tolower(item->name(Item::NAME_FLAG_NO_COLOUR)), StrX::str_tolower(item->name(Item::NAME_FLAG_NO_COLOUR | Item::NAME_FLAG_NO_COUNT)), item->parser_id(), i, ParserTarget::TARGET_EQUIPMENT, count});
+            candidates.push_back({0, StrX::str_tolower(item->name(Item::NAME_FLAG_NO_COLOUR)), StrX::str_tolower(item->name(Item::NAME_FLAG_NO_COLOUR | Item::NAME_FLAG_NO_COUNT)), item->parser_id(), i, 0, ParserTarget::TARGET_EQUIPMENT, count});
         }
     }
 
-    // Items the player is carrying.
-    if (target & ParserTarget::TARGET_INVENTORY)
+    // Items the player is carrying, or items within containers in the player's inventory.
+    if (target & ParserTarget::TARGET_INVENTORY || target & ParserTarget::TARGET_CONTAINER_INVENTORY)
     {
+        const bool check_inventory = target & ParserTarget::TARGET_INVENTORY;
+        const bool check_container = target & ParserTarget::TARGET_CONTAINER_INVENTORY;
         const std::shared_ptr<Inventory> inv = player->inv();
         for (size_t i = 0; i < inv->count(); i++)
         {
             const std::shared_ptr<Item> item = inv->get(i);
-            candidates.push_back({0, StrX::str_tolower(item->name(Item::NAME_FLAG_NO_COLOUR)), StrX::str_tolower(item->name(Item::NAME_FLAG_NO_COLOUR | Item::NAME_FLAG_NO_COUNT)), item->parser_id(), i, ParserTarget::TARGET_INVENTORY, count});
+            if (check_inventory) candidates.push_back({0, StrX::str_tolower(item->name(Item::NAME_FLAG_NO_COLOUR)), StrX::str_tolower(item->name(Item::NAME_FLAG_NO_COLOUR | Item::NAME_FLAG_NO_COUNT)), item->parser_id(), i, 0, ParserTarget::TARGET_INVENTORY, count});
+            if (!check_container || item->type() != ItemType::CONTAINER || !item->inv()) continue;
+            const std::shared_ptr<Inventory> item_inv = item->inv();
+            for (size_t j = 0; j < item_inv->count(); j++)
+            {
+                const std::shared_ptr<Item> container_item = item_inv->get(j);
+                candidates.push_back({0, StrX::str_tolower(container_item->name(Item::NAME_FLAG_NO_COLOUR)), StrX::str_tolower(container_item->name(Item::NAME_FLAG_NO_COLOUR | Item::NAME_FLAG_NO_COUNT)), container_item->parser_id(), j, i, ParserTarget::TARGET_CONTAINER_INVENTORY, count});
+            }
         }
     }
 
-    // Items in the room the player is at.
-    if (target & ParserTarget::TARGET_ROOM)
+    // Items in the room the player is at, or items within containers in that room.
+    if (target & ParserTarget::TARGET_ROOM || target & ParserTarget::TARGET_CONTAINER_ROOM)
     {
-        const std::shared_ptr<Inventory> room_inv = world->get_room(player_location)->inv();
+        const bool check_room = target & ParserTarget::TARGET_ROOM;
+        const bool check_container = target & ParserTarget::TARGET_CONTAINER_ROOM;
+        const std::shared_ptr<Inventory> room_inv = room->inv();
         for (size_t i = 0; i < room_inv->count(); i++)
         {
             const std::shared_ptr<Item> item = room_inv->get(i);
-            candidates.push_back({0, StrX::str_tolower(item->name(Item::NAME_FLAG_NO_COLOUR)), StrX::str_tolower(item->name(Item::NAME_FLAG_NO_COLOUR | Item::NAME_FLAG_NO_COUNT)), item->parser_id(), i, ParserTarget::TARGET_ROOM, count});
+            if (check_room) candidates.push_back({0, StrX::str_tolower(item->name(Item::NAME_FLAG_NO_COLOUR)), StrX::str_tolower(item->name(Item::NAME_FLAG_NO_COLOUR | Item::NAME_FLAG_NO_COUNT)), item->parser_id(), i, 0, ParserTarget::TARGET_ROOM, count});
+            if (!check_container || item->type() != ItemType::CONTAINER || !item->inv()) continue;
+            const std::shared_ptr<Inventory> item_inv = item->inv();
+            for (size_t j = 0; j < item_inv->count(); j++)
+            {
+                const std::shared_ptr<Item> container_item = item_inv->get(j);
+                candidates.push_back({0, StrX::str_tolower(container_item->name(Item::NAME_FLAG_NO_COLOUR)), StrX::str_tolower(container_item->name(Item::NAME_FLAG_NO_COLOUR | Item::NAME_FLAG_NO_COUNT)), container_item->parser_id(), j, i, ParserTarget::TARGET_CONTAINER_ROOM, count});
+            }
         }
     }
 
     // Items in a shop at the player's room.
     if (target & ParserTarget::TARGET_SHOP)
     {
-        const auto room = world->get_room(player_location);
         if (room->tag(RoomTag::Shop))
         {
             const auto shop = world->get_shop(player_location);
@@ -257,7 +275,7 @@ Parser::ParserSearchResult Parser::parse_target(std::vector<std::string> input, 
             for (size_t i = 0; i < shop_inv->count(); i++)
             {
                 const auto item = shop_inv->get(i);
-                candidates.push_back({0, StrX::str_tolower(item->name(Item::NAME_FLAG_NO_COLOUR)), StrX::str_tolower(item->name(Item::NAME_FLAG_NO_COLOUR | Item::NAME_FLAG_NO_COUNT)), item->parser_id(), i, ParserTarget::TARGET_SHOP, count});
+                candidates.push_back({0, StrX::str_tolower(item->name(Item::NAME_FLAG_NO_COLOUR)), StrX::str_tolower(item->name(Item::NAME_FLAG_NO_COLOUR | Item::NAME_FLAG_NO_COUNT)), item->parser_id(), i, 0, ParserTarget::TARGET_SHOP, count});
             }
         }
     }
@@ -266,7 +284,7 @@ Parser::ParserSearchResult Parser::parse_target(std::vector<std::string> input, 
     for (size_t i = 0; i < world->mob_count(); i++)
     {
         const std::shared_ptr<Mobile> mob = world->mob_vec(i);
-        if (mob->location() == player_location) candidates.push_back({0, StrX::str_tolower(mob->name(Mobile::NAME_FLAG_NO_COLOUR)), "", mob->parser_id(), i, ParserTarget::TARGET_MOBILE, count});
+        if (mob->location() == player_location) candidates.push_back({0, StrX::str_tolower(mob->name(Mobile::NAME_FLAG_NO_COLOUR)), "", mob->parser_id(), i, 0, ParserTarget::TARGET_MOBILE, count});
     }
 
     // Score each candidate.
@@ -336,7 +354,7 @@ Parser::ParserSearchResult Parser::parse_target(std::vector<std::string> input, 
         if (candidates.at(i).score > highest_score) highest_score = candidates.at(i).score;
 
     // No matches at all?
-    if (!highest_score) return { 0, "", "", 0, 0, ParserTarget::TARGET_NONE, 0 };
+    if (!highest_score) return { 0, "", "", 0, 0, 0, ParserTarget::TARGET_NONE, 0 };
 
     // Now strip out any candidates that don't match the highest score.
     for (size_t i = 0; i < candidates.size(); i++)
@@ -359,7 +377,7 @@ Parser::ParserSearchResult Parser::parse_target(std::vector<std::string> input, 
     disambig += StrX::comma_list(candidate_names, StrX::CL_OR) + "?";
     core()->message(disambig);
     special_state_ = SpecialState::DISAMBIGUATION;
-    return { 0, "", "", 0, 0, ParserTarget::TARGET_UNCLEAR, 0 };
+    return { 0, "", "", 0, 0, 0, ParserTarget::TARGET_UNCLEAR, 0 };
 }
 
 // Parses a known command.
@@ -369,7 +387,7 @@ void Parser::parse_pcd(const std::string &first_word, const std::vector<std::str
     const auto player = world->player();
     const auto room = world->get_room(player->location());
     Direction parsed_direction = Direction::NONE;
-    size_t parsed_target = 0;
+    size_t parsed_target = 0, parsed_target_second = 0;
     ParserTarget parsed_target_type = ParserTarget::TARGET_NONE;
     int parsed_target_count = -1;
 
@@ -395,6 +413,8 @@ void Parser::parse_pcd(const std::string &first_word, const std::vector<std::str
             if (pcd_word.find("item:e") != std::string::npos) target_flags ^= ParserTarget::TARGET_EQUIPMENT;
             if (pcd_word.find("item:r") != std::string::npos) target_flags ^= ParserTarget::TARGET_ROOM;
             if (pcd_word.find("item:s") != std::string::npos) target_flags ^= ParserTarget::TARGET_SHOP;
+            if (pcd_word.find("item:cr") != std::string::npos) target_flags ^= ParserTarget::TARGET_CONTAINER_ROOM;
+            if (pcd_word.find("item:ci") != std::string::npos) target_flags ^= ParserTarget::TARGET_CONTAINER_INVENTORY;
             if (pcd_word.find("mobile") != std::string::npos) target_flags ^= ParserTarget::TARGET_MOBILE;
             if (!target_flags) continue;
 
@@ -429,6 +449,7 @@ void Parser::parse_pcd(const std::string &first_word, const std::vector<std::str
             // Run the target-matching parser.
             ParserSearchResult psr = parse_target(target_words, static_cast<ParserTarget>(target_flags));
             parsed_target = psr.target;
+            parsed_target_second = psr.target_second;
             parsed_target_type = psr.type;
             parsed_target_count = psr.count;
 
@@ -515,7 +536,7 @@ void Parser::parse_pcd(const std::string &first_word, const std::vector<std::str
         case ParserCommand::EXAMINE:
             if (!words.size()) specify("examine");
             else if (parsed_target_type == ParserTarget::TARGET_NONE) not_here();
-            else if (parsed_target_type != ParserTarget::TARGET_UNCLEAR) ActionLook::examine(parsed_target_type, parsed_target);
+            else if (parsed_target_type != ParserTarget::TARGET_UNCLEAR) ActionLook::examine(parsed_target_type, parsed_target, parsed_target_second);
             break;
         case ParserCommand::EXCLAIM: core()->message("{m}Please type your command {M}without any spaces {m}between the exclamation mark and the rest of the command (for example, {M}!" + StrX::collapse_vector(words) + "{m})."); break;
         case ParserCommand::EXITS: ActionLook::obvious_exits(false); break;
@@ -638,7 +659,7 @@ void Parser::parse_pcd(const std::string &first_word, const std::vector<std::str
         case ParserCommand::TAKE:
             if (!words.size()) core()->message("{y}Please specify {Y}what you want to take{y}.");
             else if (parsed_target_type == ParserTarget::TARGET_NONE) core()->message("{y}You don't see {Y}" + collapsed_words + "{y} here.");
-            else if (parsed_target_type == ParserTarget::TARGET_ROOM) ActionInventory::take(player, parsed_target, parsed_target_count, confirm);
+            else if (parsed_target_type == ParserTarget::TARGET_ROOM || parsed_target_type == ParserTarget::TARGET_CONTAINER_ROOM || parsed_target_type == ParserTarget::TARGET_CONTAINER_INVENTORY) ActionInventory::take(player, parsed_target_type, parsed_target, parsed_target_second, parsed_target_count, confirm);
             break;
         case ParserCommand::TELEPORT:
             if (!words.size()) core()->message("{y}Please specify a {Y}teleport destination{y}.");

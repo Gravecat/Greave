@@ -12,7 +12,7 @@
 #include <vector>
 
 
-enum ParserTarget : uint8_t { TARGET_NONE = 0, TARGET_EQUIPMENT = 1, TARGET_INVENTORY = 2, TARGET_MOBILE = 4, TARGET_ROOM = 8, TARGET_SHOP = 16, TARGET_UNCLEAR = 32 };
+enum ParserTarget : uint8_t { TARGET_NONE = 0, TARGET_EQUIPMENT = 1, TARGET_INVENTORY = 2, TARGET_MOBILE = 4, TARGET_ROOM = 8, TARGET_SHOP = 16, TARGET_CONTAINER_ROOM = 32, TARGET_CONTAINER_INVENTORY = 64, TARGET_UNCLEAR = 128 };
 
 class Parser
 {
@@ -43,7 +43,7 @@ private:
         int             score;
         std::string     name, name_np;
         uint32_t        parser_id;
-        size_t          target;
+        size_t          target, target_second;
         ParserTarget    type;
         int             count;
     };

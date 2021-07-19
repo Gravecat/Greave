@@ -14,7 +14,7 @@
 class ActionLook
 {
 public:
-    static void examine(ParserTarget target_type, size_t target);   // Examines an Item or Mobile.
+    static void examine(ParserTarget target_type, size_t target, size_t target_second); // Examines an Item or Mobile.
     static void look();                     // Take a look around at your surroundings.
     static void obvious_exits(bool indent); // Lists the exits from this area.
 

@@ -4,6 +4,7 @@
 #ifndef GREAVE_ACTIONS_INVENTORY_H_
 #define GREAVE_ACTIONS_INVENTORY_H_
 
+#include "core/parser.h"
 #include "world/mobile.h"
 
 #include <cstddef>
@@ -17,7 +18,7 @@ public:
     static void drop(std::shared_ptr<Mobile> mob, size_t item_pos, int count, bool confirm);    // Drops an item on the ground.
     static bool equip(std::shared_ptr<Mobile> mob, size_t item_pos, bool confirm);              // Wields or wears an equippable item.
     static void equipment();                                                                    // Checks to see what's wielded and/or worn.
-    static void take(std::shared_ptr<Mobile> mob, size_t item_pos, int count, bool confirm);    // Takes an item from the ground.
+    static void take(std::shared_ptr<Mobile> mob, ParserTarget target_type, size_t item_pos, size_t item_pos_second, int count, bool confirm);    // Takes an item from the ground or a container.
     static bool unequip(std::shared_ptr<Mobile> mob, size_t item_pos, bool confirm);            // Unequips a worn or wielded item.
     static bool unequip(std::shared_ptr<Mobile> mob, EquipSlot slot, bool confirm);             // As above, but specifying an EquipSlot.
 

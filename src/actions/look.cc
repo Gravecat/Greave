@@ -8,12 +8,14 @@
 
 
 // Examines an Item or Mobile.
-void ActionLook::examine(ParserTarget target_type, size_t target)
+void ActionLook::examine(ParserTarget target_type, size_t target, size_t target_second)
 {
     const auto world = core()->world();
     const auto player = world->player();
     switch (target_type)
     {
+        case ParserTarget::TARGET_CONTAINER_INVENTORY: examine_item(player->inv()->get(target_second)->inv()->get(target)); break;
+        case ParserTarget::TARGET_CONTAINER_ROOM: examine_item(world->get_room(player->location())->inv()->get(target_second)->inv()->get(target)); break;
         case ParserTarget::TARGET_EQUIPMENT: examine_item(player->equ()->get(target)); break;
         case ParserTarget::TARGET_INVENTORY: examine_item(player->inv()->get(target)); break;
         case ParserTarget::TARGET_MOBILE: examine_mobile(world->mob_vec(target)); break;

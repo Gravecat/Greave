@@ -254,12 +254,20 @@ void ActionInventory::equipment()
 }
 
 // Takes an item from the ground.
-void ActionInventory::take(std::shared_ptr<Mobile> mob, size_t item_pos, int count, bool confirm)
+void ActionInventory::take(std::shared_ptr<Mobile> mob, ParserTarget target_type, size_t item_pos, size_t item_pos_second, int count, bool confirm)
 {
     const std::shared_ptr<Room> room = core()->world()->get_room(mob->location());
-    const std::shared_ptr<Item> item = room->inv()->get(item_pos);
+    const bool container = (target_type == ParserTarget::TARGET_CONTAINER_INVENTORY || target_type == ParserTarget::TARGET_CONTAINER_ROOM);
+    std::shared_ptr<Item> container_item = nullptr;
+    if (target_type == ParserTarget::TARGET_CONTAINER_ROOM) container_item = room->inv()->get(item_pos_second);
+    else if (target_type == ParserTarget::TARGET_CONTAINER_INVENTORY) container_item = core()->world()->player()->inv()->get(item_pos_second);
+    const std::shared_ptr<Inventory> inv = (container ? container_item->inv() : room->inv());
+
+    std::shared_ptr<Item> item = inv->get(item_pos);
     const bool stackable = item->tag(ItemTag::Stackable);
     if (!count_check(item, count)) return;
+    std::string take_str = (container ? "take " : "pick up ");
+    std::string from_str = (container ? " {u}from " + container_item->name(Item::NAME_FLAG_THE) + "{u}." : "{u}.");
 
     int weight = item->weight(true);
     if (stackable)
@@ -275,7 +283,7 @@ void ActionInventory::take(std::shared_ptr<Mobile> mob, size_t item_pos, int cou
 
     if (!mob->pass_time(TIME_GET_ITEM, !confirm))
     {
-        core()->parser()->interrupted("pick up " + item->stack_name(count, Item::NAME_FLAG_THE));
+        core()->parser()->interrupted(take_str + item->stack_name(count, Item::NAME_FLAG_THE));
         return;
     }
     if (mob->is_dead()) return;
@@ -283,15 +291,16 @@ void ActionInventory::take(std::shared_ptr<Mobile> mob, size_t item_pos, int cou
     const bool get_all = (!stackable) || (count == -1 || count == static_cast<int>(item->stack()));
     if (get_all)
     {
-        room->inv()->erase(item_pos);
+        inv->erase(item_pos);
         mob->inv()->add_item(item);
+        if (container && !inv->count()) container_item->assign_inventory(nullptr);
     }
     else
     {
         auto split = item->split(count);
         mob->inv()->add_item(split);
     }
-    if (mob->is_player()) core()->message("{u}You pick up " + item->stack_name(count, Item::NAME_FLAG_THE) + "{u}.");
+    if (mob->is_player()) core()->message("{u}You " + take_str + item->stack_name(count, Item::NAME_FLAG_THE) + from_str);
     // todo: add message for NPCs taking items
 }
 
