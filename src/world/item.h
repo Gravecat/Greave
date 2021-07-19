@@ -48,6 +48,7 @@ enum class ItemTag : uint16_t { _None = 0,  // Do not use this tag, it's just a 
     AmmoBolt,           // Either this is a weapon that uses bolts, or it's a stack of bolts.
     HandAndAHalf,       // Hand-and-a-half weapons can be wielded in either one or both hands.
     NoAmmo,             // This is a ranged weapon that does not require ammo.
+    NoLoot,             // This item cannot be looted from corpses.
     OffHandOnly,        // This item can ONLY be equipped in the off-hand.
     PreferOffHand,      // When equipped, this Item prefers to be held in the off-hand.
     TwoHanded,          // This Item requires two hands to wield.

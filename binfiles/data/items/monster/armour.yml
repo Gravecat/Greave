@@ -7,6 +7,7 @@ MONSTER_CHITIN_1:
   power: 3
   rare: 1
   slot: body
+  tags: [ NoLoot ]
   type: [ armour, heavy ]
   value: 0
   weight: 0
@@ -17,6 +18,7 @@ MONSTER_CHITIN_2:
   power: 5
   rare: 1
   slot: body
+  tags: [ NoLoot ]
   type: [ armour, heavy ]
   value: 0
   weight: 0
@@ -27,6 +29,7 @@ MONSTER_HIDE_1:
   power: 3
   rare: 1
   slot: body
+  tags: [ NoLoot ]
   type: [ armour, light ]
   value: 0
   weight: 0
@@ -37,6 +40,7 @@ MONSTER_HIDE_2:
   power: 5
   rare: 1
   slot: body
+  tags: [ NoLoot ]
   type: [ armour, light ]
   value: 0
   weight: 0
@@ -47,6 +51,7 @@ MONSTER_HIDE_3:
   power: 8
   rare: 1
   slot: body
+  tags: [ NoLoot ]
   type: [ armour, light ]
   value: 0
   weight: 0
@@ -57,7 +62,7 @@ MONSTER_SCALES_1:
   power: 3
   rare: 1
   slot: body
-  tags: [ PluralName ]
+  tags: [ NoLoot, PluralName ]
   type: [ armour, medium ]
   value: 0
   weight: 0

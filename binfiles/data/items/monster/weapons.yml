@@ -11,6 +11,7 @@ MONSTER_BITE:
   rare: 1
   slot: held
   speed: 1.0
+  tags: [ NoLoot ]
   type: [ weapon, melee ]
   value: 0
   weight: 0
@@ -24,6 +25,7 @@ MONSTER_BITE_0:
   rare: 1
   slot: held
   speed: 1.0
+  tags: [ NoLoot ]
   type: [ weapon, melee ]
   value: 0
   weight: 0
@@ -38,6 +40,7 @@ MONSTER_BITE_2:
   rare: 1
   slot: held
   speed: 1.0
+  tags: [ NoLoot ]
   type: [ weapon, melee ]
   value: 0
   weight: 0
@@ -52,7 +55,7 @@ MONSTER_BITE_2H:
   rare: 1
   slot: held
   speed: 1.2
-  tags: [ TwoHanded ]
+  tags: [ NoLoot, TwoHanded ]
   type: [ weapon, melee ]
   value: 0
   weight: 0
@@ -66,7 +69,7 @@ MONSTER_BITE_2H_0:
   rare: 1
   slot: held
   speed: 1.2
-  tags: [ TwoHanded ]
+  tags: [ NoLoot, TwoHanded ]
   type: [ weapon, melee ]
   value: 0
   weight: 0
@@ -81,7 +84,7 @@ MONSTER_BITE_2H_2:
   rare: 1
   slot: held
   speed: 1.2
-  tags: [ TwoHanded ]
+  tags: [ NoLoot, TwoHanded ]
   type: [ weapon, melee ]
   value: 0
   weight: 0
@@ -96,7 +99,7 @@ MONSTER_BITE_2H_PIERCE:
   rare: 1
   slot: held
   speed: 1.2
-  tags: [ TwoHanded ]
+  tags: [ NoLoot, TwoHanded ]
   type: [ weapon, melee ]
   value: 0
   weight: 0
@@ -111,7 +114,7 @@ MONSTER_BITE_2H_PIERCE_0:
   rare: 1
   slot: held
   speed: 1.2
-  tags: [ TwoHanded ]
+  tags: [ NoLoot, TwoHanded ]
   type: [ weapon, melee ]
   value: 0
   weight: 0
@@ -126,7 +129,7 @@ MONSTER_BITE_2H_PIERCE_2:
   rare: 1
   slot: held
   speed: 1.2
-  tags: [ TwoHanded ]
+  tags: [ NoLoot, TwoHanded ]
   type: [ weapon, melee ]
   value: 0
   weight: 0
@@ -142,7 +145,7 @@ MONSTER_BITE_2H_VENOM:
   rare: 1
   slot: held
   speed: 1.2
-  tags: [ TwoHanded ]
+  tags: [ NoLoot, TwoHanded ]
   type: [ weapon, melee ]
   value: 0
   weight: 0
@@ -158,7 +161,7 @@ MONSTER_BITE_2H_VENOM_0:
   rare: 1
   slot: held
   speed: 1.2
-  tags: [ TwoHanded ]
+  tags: [ NoLoot, TwoHanded ]
   type: [ weapon, melee ]
   value: 0
   weight: 0
@@ -174,7 +177,7 @@ MONSTER_BITE_2H_VENOM_2:
   rare: 1
   slot: held
   speed: 1.2
-  tags: [ TwoHanded ]
+  tags: [ NoLoot, TwoHanded ]
   type: [ weapon, melee ]
   value: 0
   weight: 0
@@ -189,6 +192,7 @@ MONSTER_BITE_CRUSH:
   rare: 1
   slot: held
   speed: 1.0
+  tags: [ NoLoot ]
   type: [ weapon, melee ]
   value: 0
   weight: 0
@@ -202,6 +206,7 @@ MONSTER_BITE_CRUSH_0:
   rare: 1
   slot: held
   speed: 1.0
+  tags: [ NoLoot ]
   type: [ weapon, melee ]
   value: 0
   weight: 0
@@ -216,6 +221,7 @@ MONSTER_BITE_CRUSH_2:
   rare: 1
   slot: held
   speed: 1.0
+  tags: [ NoLoot ]
   type: [ weapon, melee ]
   value: 0
   weight: 0
@@ -230,6 +236,7 @@ MONSTER_CLAW:
   rare: 1
   slot: held
   speed: 0.8
+  tags: [ NoLoot ]
   type: [ weapon, melee ]
   value: 0
   weight: 0
@@ -244,6 +251,7 @@ MONSTER_CLAW_0:
   rare: 1
   slot: held
   speed: 0.8
+  tags: [ NoLoot ]
   type: [ weapon, melee ]
   value: 0
   weight: 0
@@ -258,6 +266,7 @@ MONSTER_CLAW_2:
   rare: 1
   slot: held
   speed: 0.8
+  tags: [ NoLoot ]
   type: [ weapon, melee ]
   value: 0
   weight: 0
@@ -272,6 +281,7 @@ MONSTER_GORE:
   rare: 1
   slot: held
   speed: 1.0
+  tags: [ NoLoot ]
   type: [ weapon, melee ]
   value: 0
   weight: 0
@@ -286,6 +296,7 @@ MONSTER_GORE_0:
   rare: 1
   slot: held
   speed: 1.0
+  tags: [ NoLoot ]
   type: [ weapon, melee ]
   value: 0
   weight: 0
@@ -300,6 +311,7 @@ MONSTER_GORE_2:
   rare: 1
   slot: held
   speed: 1.0
+  tags: [ NoLoot ]
   type: [ weapon, melee ]
   value: 0
   weight: 0
@@ -314,7 +326,7 @@ MONSTER_SPIT:
   rare: 1
   slot: held
   speed: 1.5
-  tags: [ NoAmmo ]
+  tags: [ NoAmmo, NoLoot ]
   type: [ weapon, ranged ]
   value: 0
   weight: 0
@@ -328,7 +340,7 @@ MONSTER_SPIT_0:
   rare: 1
   slot: held
   speed: 1.5
-  tags: [ NoAmmo ]
+  tags: [ NoAmmo, NoLoot ]
   type: [ weapon, ranged ]
   value: 0
   weight: 0
@@ -343,7 +355,7 @@ MONSTER_SPIT_2:
   rare: 1
   slot: held
   speed: 1.5
-  tags: [ NoAmmo ]
+  tags: [ NoAmmo, NoLoot ]
   type: [ weapon, ranged ]
   value: 0
   weight: 0
@@ -358,6 +370,7 @@ MONSTER_STING:
   rare: 1
   slot: held
   speed: 1.1
+  tags: [ NoLoot ]
   type: [ weapon, melee ]
   value: 0
   weight: 0
@@ -372,6 +385,7 @@ MONSTER_STING_0:
   rare: 1
   slot: held
   speed: 1.1
+  tags: [ NoLoot ]
   type: [ weapon, melee ]
   value: 0
   weight: 0
@@ -386,6 +400,7 @@ MONSTER_STING_2:
   rare: 1
   slot: held
   speed: 1.1
+  tags: [ NoLoot ]
   type: [ weapon, melee ]
   value: 0
   weight: 0
@@ -400,7 +415,7 @@ MONSTER_STING_2H:
   rare: 1
   slot: held
   speed: 1.3
-  tags: [ TwoHanded ]
+  tags: [ NoLoot, TwoHanded ]
   type: [ weapon, melee ]
   value: 0
   weight: 0
@@ -415,7 +430,7 @@ MONSTER_STING_2H_0:
   rare: 1
   slot: held
   speed: 1.3
-  tags: [ TwoHanded ]
+  tags: [ NoLoot, TwoHanded ]
   type: [ weapon, melee ]
   value: 0
   weight: 0
@@ -430,7 +445,7 @@ MONSTER_STING_2H_2:
   rare: 1
   slot: held
   speed: 1.3
-  tags: [ TwoHanded ]
+  tags: [ NoLoot, TwoHanded ]
   type: [ weapon, melee ]
   value: 0
   weight: 0

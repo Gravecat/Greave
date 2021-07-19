@@ -218,7 +218,7 @@ void ActionLook::examine_item(std::shared_ptr<Item> target)
 
     if (target->type() == ItemType::CONTAINER && target->subtype() == ItemSub::CORPSE)
     {
-        if (target->inv()) inv_list = true;
+        if (target->inv() && target->inv()->count()) inv_list = true;
         else stat_string += "{y}It doesn't contain anything. ";
     }
 

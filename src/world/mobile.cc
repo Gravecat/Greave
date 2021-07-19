@@ -167,14 +167,24 @@ void Mobile::die(bool death_message)
     while (equipment_->count())
     {
         auto item = equipment_->get(0);
-        inventory_->add_item(item);
+        if (!item->tag(ItemTag::NoLoot)) inventory_->add_item(item);
         equipment_->remove_item(0);
+    }
+
+    // Remove any other NoLoot tagged items.
+    for (size_t i = 0; i < inventory_->count(); i++)
+    {
+        if (inventory_->get(i)->tag(ItemTag::NoLoot))
+        {
+            inventory_->erase(i);
+            i--;
+        }
     }
 
     // Create a corpse, dump all inventory/equipment items in there by reassigning the old inventory pointer.
     auto new_corpse = world->get_item("CORPSE");
     new_corpse->set_name("{r}" + name(NAME_FLAG_POSSESSIVE | NAME_FLAG_NO_COLOUR) + (unliving ? " {R}remains" : " {R}corpse"));
-    new_corpse->assign_inventory(inventory_);
+    if (inventory_->count()) new_corpse->assign_inventory(inventory_);
     world->get_room(location_)->inv()->add_item(new_corpse);
 
     // Now we can dispose of the old mobile.
