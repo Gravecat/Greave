@@ -21,13 +21,13 @@ const std::map<std::string, DamageType> World::DAMAGE_TYPE_MAP = { { "acid", Dam
 const std::map<std::string, EquipSlot> World::EQUIP_SLOT_MAP = { { "about", EquipSlot::ABOUT_BODY }, { "armour", EquipSlot::ARMOUR }, { "body", EquipSlot::BODY }, { "feet", EquipSlot::FEET }, { "hands", EquipSlot::HANDS }, { "head", EquipSlot::HEAD }, { "held", EquipSlot::HAND_MAIN } };
 
 // Lookup table for converting ItemSub text names into enums.
-const std::map<std::string, ItemSub> World::ITEM_SUBTYPE_MAP = { { "arrow", ItemSub::ARROW }, { "bolt", ItemSub::BOLT }, { "booze", ItemSub::BOOZE }, { "clothing", ItemSub::CLOTHING }, { "corpse", ItemSub::CORPSE }, { "heavy", ItemSub::HEAVY }, { "light", ItemSub::LIGHT }, { "medium", ItemSub::MEDIUM }, { "melee", ItemSub::MELEE }, { "none", ItemSub::NONE }, { "ranged", ItemSub::RANGED }, { "unarmed", ItemSub::UNARMED }, { "water_container", ItemSub::WATER_CONTAINER } };
+const std::map<std::string, ItemSub> World::ITEM_SUBTYPE_MAP = { { "arrow", ItemSub::ARROW }, { "bolt", ItemSub::BOLT }, { "booze", ItemSub::BOOZE }, { "clothing", ItemSub::CLOTHING }, { "corpse", ItemSub::CORPSE }, { "healing", ItemSub::HEALING }, { "heavy", ItemSub::HEAVY }, { "light", ItemSub::LIGHT }, { "medium", ItemSub::MEDIUM }, { "melee", ItemSub::MELEE }, { "none", ItemSub::NONE }, { "ranged", ItemSub::RANGED }, { "unarmed", ItemSub::UNARMED }, { "water_container", ItemSub::WATER_CONTAINER } };
 
 // Lookup table for converting ItemTag text names into enums.
 const std::map<std::string, ItemTag> World::ITEM_TAG_MAP = { { "ammoarrow", ItemTag::AmmoArrow }, { "ammobolt", ItemTag::AmmoBolt }, { "discardwhenempty", ItemTag::DiscardWhenEmpty }, { "handandahalf", ItemTag::HandAndAHalf }, { "noa", ItemTag::NoA }, { "noammo", ItemTag::NoAmmo }, { "noloot", ItemTag::NoLoot }, { "offhandonly", ItemTag::OffHandOnly }, { "pluralname", ItemTag::PluralName }, { "preferoffhand", ItemTag::PreferOffHand }, { "propernoun", ItemTag::ProperNoun }, { "stackable", ItemTag::Stackable }, { "tavernonly", ItemTag::TavernOnly }, { "twohanded", ItemTag::TwoHanded } };
 
 // Lookup table for converting ItemType text names into enums.
-const std::map<std::string, ItemType> World::ITEM_TYPE_MAP = { { "ammo", ItemType::AMMO }, { "armour", ItemType::ARMOUR }, { "container", ItemType::CONTAINER }, { "drink", ItemType::DRINK }, { "food", ItemType::FOOD }, { "key", ItemType::KEY }, { "light", ItemType::LIGHT }, { "none", ItemType::NONE }, { "shield", ItemType::SHIELD }, { "weapon", ItemType::WEAPON } };
+const std::map<std::string, ItemType> World::ITEM_TYPE_MAP = { { "ammo", ItemType::AMMO }, { "armour", ItemType::ARMOUR }, { "container", ItemType::CONTAINER }, { "drink", ItemType::DRINK }, { "food", ItemType::FOOD }, { "key", ItemType::KEY }, { "light", ItemType::LIGHT }, { "none", ItemType::NONE }, { "potion", ItemType::POTION }, { "shield", ItemType::SHIELD }, { "weapon", ItemType::WEAPON } };
 
 // Lookup table for converting textual light levels (e.g. "bright") to integer values.
 const std::map<std::string, uint8_t> World::LIGHT_LEVEL_MAP = { { "bright", 7 }, { "dim", 5 }, { "wilderness", 5 }, { "dark", 3 }, { "none", 0 } };

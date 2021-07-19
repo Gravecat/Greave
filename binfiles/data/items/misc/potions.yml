@@ -1,0 +1,13 @@
+# data/items/misc/potions.yml -- Potions that can be consumed for various effects.
+# Copyright (c) 2021 Raine "Gravecat" Simmons. Licensed under the GNU Affero General Public License v3 or any later version.
+
+ELIXIR_KINGSWORT:
+  desc: A small glass vial filled with a bright red fluid.
+  name: kingswort elixir
+  power: 30
+  rare: 7
+  speed: 5
+  tags: [ Stackable ]
+  type: [ potion, healing ]
+  value: 6g
+  weight: 2

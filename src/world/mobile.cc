@@ -462,7 +462,7 @@ int Mobile::restore_hp(int amount)
 {
     int missing = hp_[1] - hp_[0];
     if (missing < amount) amount = missing;
-    hp_[0] += missing;
+    hp_[0] += amount;
     return missing;
 }
 

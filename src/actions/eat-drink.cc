@@ -2,6 +2,7 @@
 // Copyright (c) 2021 Raine "Gravecat" Simmons. Licensed under the GNU Affero General Public License v3 or any later version.
 
 #include "actions/eat-drink.h"
+#include "actions/potions.h"
 #include "core/core.h"
 
 
@@ -13,7 +14,8 @@ void ActionEatDrink::drink(size_t inv_pos, bool confirm)
     const int liquid_available = item->charge();
     if (item->type() != ItemType::DRINK)
     {
-        core()->message("{u}That isn't something you can drink!");
+        if (item->type() == ItemType::POTION) ActionPotions::drink(inv_pos, confirm);
+        else core()->message("{u}That isn't something you can drink!");
         return;
     }
     if (!liquid_available)

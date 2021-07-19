@@ -80,6 +80,7 @@ set(GREAVE_CPPS
   actions/help.cc
   actions/inventory.cc
   actions/look.cc
+  actions/potions.cc
   actions/rest.cc
   actions/status.cc
   actions/travel.cc

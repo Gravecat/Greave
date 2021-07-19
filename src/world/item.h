@@ -22,7 +22,7 @@ enum class DamageType : int8_t { ACID, BALLISTIC, CRUSHING, EDGED, ENERGY, EXPLO
 enum class EquipSlot : uint8_t { NONE, HAND_MAIN, HAND_OFF, BODY, ARMOUR, ABOUT_BODY, HEAD, HANDS, FEET, _END };
 
 // ItemType is the primary type of Item (e.g. weapon, food, etc.)
-enum class ItemType : uint16_t { NONE, AMMO, ARMOUR, CONTAINER, DRINK, FOOD, KEY, LIGHT, SHIELD, WEAPON };
+enum class ItemType : uint16_t { NONE, AMMO, ARMOUR, CONTAINER, DRINK, FOOD, KEY, LIGHT, POTION, SHIELD, WEAPON };
 
 // ItemSub is for sub-types of items, e.g. a tool could sub-classify itself here.
 enum class ItemSub : uint16_t { NONE,
@@ -30,6 +30,7 @@ enum class ItemSub : uint16_t { NONE,
     CLOTHING, HEAVY, LIGHT, MEDIUM, // ARMOUR subtypes.
     CORPSE,                         // CONTAINER subtypes.
     BOOZE, WATER_CONTAINER,         // DRINK subtypes.
+    HEALING,                        // POTION subtypes.
     MELEE, RANGED, UNARMED,         // WEAPON subtypes.
     };
 

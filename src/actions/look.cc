@@ -139,6 +139,18 @@ void ActionLook::examine_item(std::shared_ptr<Item> target)
             stat_string += "It provides a brightness level of {Y}" + std::to_string(target->power()) + "{w} when used. ";
             break;
         case ItemType::NONE: break;
+        case ItemType::POTION:
+        {
+            stat_string = this_is_string_caps + (plural_name ? " {U}potions" : " a {U}potion") + " {w}which can be consumed. " + rarity_msg();
+            const std::string power_str = "{U}" + std::to_string(target->power()) + "{w}";
+            switch (target->subtype())
+            {
+                case ItemSub::HEALING: stat_string += std::string(plural_name ? "They {U}promote" : "It {U}promotes") + " the magical healing of wounds{w}, and " + (plural_name ? "have" : "has") + " a potency of " + power_str; break;
+                default: break;
+            }
+            stat_string += ", and will take {U}" + StrX::time_string_rough(target->speed()) + " {w}to drink. ";
+            break;
+        }
         case ItemType::SHIELD:
             stat_string = this_is_string_caps + " a {U}shield {w}which can be wielded. " + rarity_msg();
             stat_string += "It has an armour value of {U}" + std::to_string(target->power()) + "{w}. ";
@@ -212,7 +224,7 @@ void ActionLook::examine_item(std::shared_ptr<Item> target)
     else if (diff >= 100) appraise_str = "{Y}you think {w}";
 
     if (!appraised_value) stat_string += (stackable ? "{w}, and {y}aren't worth anything{w}." : "{w}, and {y}isn't worth anything{w}. ");
-    else stat_string += (stackable || plural_name ? "{w}, and " + appraise_str + "they're worth around {U}" : "{w}, and " + appraise_str + "it's worth around {U}") + StrX::mgsc_string(appraised_value, StrX::MGSC::LONG) + "{w}. ";
+    else stat_string += ((stackable && target->stack() > 1) || plural_name ? "{w}, and " + appraise_str + "they're worth around {U}" : "{w}, and " + appraise_str + "it's worth around {U}") + StrX::mgsc_string(appraised_value, StrX::MGSC::LONG) + "{w}. ";
 
     bool inv_list = false;
 

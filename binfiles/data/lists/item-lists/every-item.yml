@@ -1,7 +1,7 @@
 # data/lists/item-lists/every-item.yml -- Every single item in the game, excluding debug items, non-lootable stuff, etc.
 # Copyright (c) 2021 Raine "Gravecat" Simmons. Licensed under the GNU Affero General Public License v3 or any later version.
 
-EVERY_ITEM: [ "#EVERY_ARMOUR", "#EVERY_DRINK", "#EVERY_FOOD", "#EVERY_WEAPON" ]
+EVERY_ITEM: [ "#EVERY_ARMOUR", "#EVERY_DRINK", "#EVERY_FOOD", "#EVERY_POTION", "#EVERY_WEAPON" ]
 
 
 EVERY_ARMOUR: [ "#EVERY_ARMOUR_FEET", "#EVERY_ARMOUR_HANDS", "#EVERY_ARMOUR_HEAD", "#EVERY_ARMOUR_INNER", "#EVERY_ARMOUR_OUTER", "#EVERY_ARMOUR_SHIELD" ]
@@ -27,6 +27,9 @@ EVERY_DRINK_CONTAINER: [ WATERSKIN, -1 ]
 
 
 EVERY_FOOD: [ BREAD, -1, CHEESE, -1, MEAT_COOKED, -1 ]
+
+
+EVERY_POTION: [ ELIXIR_KINGSWORT, -1 ]
 
 
 EVERY_WEAPON: [ "#EVERY_WEAPON_AMMO", "#EVERY_WEAPON_AXE", "#EVERY_WEAPON_BOW", "#EVERY_WEAPON_DAGGER", "#EVERY_WEAPON_MACE", "#EVERY_WEAPON_MISC", "#EVERY_WEAPON_SWORD" ]
