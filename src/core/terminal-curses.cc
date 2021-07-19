@@ -3,9 +3,6 @@
 
 #ifdef GREAVE_INCLUDE_CURSES
 
-#ifdef GREAVE_TARGET_WINDOWS
-#include "3rdparty/PDCurses/curses.h"
-#endif
 #ifdef GREAVE_TOLK
 #include "3rdparty/Tolk/Tolk.h"
 #endif
@@ -14,7 +11,11 @@
 #include "core/strx.h"
 #include "core/terminal-curses.h"
 
-#ifdef GREAVE_TARGET_LINUX
+// Include curses.h *last*. Reason being, it attempts to re-#define OK (which has already been defined by SQLiteCpp, which ends up being included by some previous headers). Because Curses #undefines it first and SQLiteCpp doesn't, it's okay to allow SQLiteCpp to define it first, then for Curses to override it -- they both #define it to 0, but more importantly, SQLiteCpp isn't even *used* in terminal-curses.cc aside from its header being included somewhere along the chains of includes above.
+// tl;dr: curses.h must be included last here for reasons.
+#ifdef GREAVE_TARGET_WINDOWS
+#include "3rdparty/PDCurses/curses.h"
+#else
 #include <curses.h>
 #endif
 

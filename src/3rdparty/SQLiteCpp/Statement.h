@@ -30,7 +30,7 @@ namespace SQLite
 class Database;
 class Column;
 
-extern const int OK_; ///< SQLITE_OK
+extern const int OK; ///< SQLITE_OK
 
 /**
  * @brief RAII encapsulation of a prepared SQLite Statement.
@@ -753,7 +753,7 @@ private:
      */
     void check(const int aRet) const
     {
-        if (SQLite::OK_ != aRet)
+        if (SQLite::OK != aRet)
         {
             throw SQLite::Exception(mStmtPtr, aRet);
         }

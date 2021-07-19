@@ -33,7 +33,7 @@ const int   OPEN_CREATE     = SQLITE_OPEN_CREATE;
 const int   OPEN_URI        = SQLITE_OPEN_URI;
 const int   OPEN_FULLMUTEX  = SQLITE_OPEN_FULLMUTEX;
 
-const int   OK_             = SQLITE_OK;
+const int   OK              = SQLITE_OK;
 
 const char* VERSION         = SQLITE_VERSION;
 const int   VERSION_NUMBER  = SQLITE_VERSION_NUMBER;

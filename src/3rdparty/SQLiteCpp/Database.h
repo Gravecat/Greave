@@ -44,7 +44,7 @@ extern const int OPEN_FULLMUTEX;    // SQLITE_OPEN_FULLMUTEX
 /// Enable URI filename interpretation, parsed according to RFC 3986 (ex. "file:data.db?mode=ro&cache=private")
 extern const int OPEN_URI;          // SQLITE_OPEN_URI
 
-extern const int OK_;               ///< SQLITE_OK (used by check() bellow)
+extern const int OK;                ///< SQLITE_OK (used by check() bellow)
 
 extern const char*  VERSION;        ///< SQLITE_VERSION string from the sqlite3.h used at compile time
 extern const int    VERSION_NUMBER; ///< SQLITE_VERSION_NUMBER from the sqlite3.h used at compile time
@@ -474,7 +474,7 @@ public:
      */
     void check(const int aRet) const
     {
-        if (SQLite::OK_ != aRet)
+        if (SQLite::OK != aRet)
         {
             throw SQLite::Exception(getHandle(), aRet);
         }
